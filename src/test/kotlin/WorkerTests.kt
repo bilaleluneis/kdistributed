@@ -11,6 +11,10 @@ import functional.Map
 import functional.Reduce
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import types.Bag
+import types.filter
+import types.map
+import types.reduce
 
 class WorkerTests {
 
@@ -31,7 +35,6 @@ class WorkerTests {
 
 }
 
-//FIXME: need to capture and return grpID and use in other ops
 class TestBagImpl : Bag {
 
     private var data    = mutableMapOf<GrpID, List<Data>>()

@@ -8,7 +8,6 @@ package common
 
 import java.io.Serializable
 import java.rmi.Remote
-import java.rmi.RemoteException
 
 @JvmInline
 value class Port(val value: Int = 8081)
@@ -33,36 +32,6 @@ fun <T> List<Data>.toDataOnly(): List<DataOnly<T>> = when (this[0]) {
 
 // all distributed types interfaces will need to implement this
 interface DistributedType : Remote
-
-interface Bag : DistributedType {
-
-    @Throws(RemoteException::class)
-    fun <T> create(vararg values: T): Pair<Bag, GrpID>
-
-    @Throws(RemoteException::class)
-    fun <T> filter(grp: GrpID, f: (T) -> Boolean): Bag
-
-    @Throws(RemoteException::class)
-    fun <T, R> map(grp: GrpID, m: (T) -> R): Bag
-
-    @Throws(RemoteException::class)
-    fun <T> reduce(grp: GrpID,r: (List<T>) -> T): T
-
-}
-
-fun <T> Pair<Bag, GrpID>.filter(f: (T) -> Boolean) = let{
-        (bag, grp) -> bag.filter(grp, f)
-        this
-}
-
-fun <T, R> Pair<Bag, GrpID>.map(m: (T) -> R) = let{
-        (bag, grp) -> bag.map(grp, m)
-        this
-}
-
-fun <T> Pair<Bag, GrpID>.reduce(r: (List<T>) -> T) = let{
-        (bag, grp) -> bag.reduce(grp, r)
-}
 
 data class DistNode<T>(
     val data:   T,
