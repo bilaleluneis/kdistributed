@@ -31,7 +31,7 @@ fun <T> List<Data>.toDataOnly(): List<DataOnly<T>> = when (this[0]) {
 }
 
 // all distributed types interfaces will need to implement this
-interface DistributedType : Remote
+interface Distributed : Remote
 
 data class DistNode<T>(
     val data:   T,

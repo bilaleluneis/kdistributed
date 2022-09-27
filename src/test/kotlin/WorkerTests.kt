@@ -5,16 +5,9 @@
  */
 
 import common.*
-import functional.Filter
-import functional.FunctionalOps
-import functional.Map
-import functional.Reduce
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import types.Bag
-import types.filter
-import types.map
-import types.reduce
+import types.*
 
 class WorkerTests {
 
@@ -29,42 +22,8 @@ class WorkerTests {
         @JvmStatic
         @BeforeAll
         fun startWorker() {
-            Worker.publish<Bag>(Port(8081), TestBagImpl())
+            Worker.publish<Bag>(Port(8081), BasicBag())
         }
-    }
-
-}
-
-class TestBagImpl : Bag {
-
-    private var data    = mutableMapOf<GrpID, List<Data>>()
-    private var ops     = mutableMapOf<GrpID, MutableList<FunctionalOps>>()
-
-    override fun <T> create(vararg values: T): Pair<TestBagImpl, GrpID> {
-        val grp = GrpID()
-        data[grp] = values.map { DataWithUuiD(it, UuID()) }
-        return Pair(this, grp)
-    }
-
-    override fun <T> filter(grp: GrpID, f: (T) -> Boolean): TestBagImpl {
-        ops.getOrPut(grp) { mutableListOf() }.add(Filter(f))
-        return this
-    }
-
-    override fun <T, R> map(grp: GrpID, m: (T) -> R): TestBagImpl {
-        ops.getOrPut(grp) { mutableListOf() }.add(Map(m))
-        return this
-    }
-
-    override fun <T> reduce(grp: GrpID, r: (List<T>) -> T): T {
-        require(grp in ops)
-        val result = ops[grp]?.run {
-            this.add(Reduce(r))
-            var currEval = data[grp]!!
-            this.forEach { currEval = it.eval(currEval) }
-            currEval.toDataOnly<T>().first().data
-        }
-        return result!!
     }
 
 }
