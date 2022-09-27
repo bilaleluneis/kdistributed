@@ -24,7 +24,7 @@ class OperationTests {
         ops = listOf(
             Filter<Int> { it < 30 },
             Map<Int, Int> { 1 },
-            Reduce<Int> { it.sum() }
+            Reduce<Int, Int> { it.sum() } // TODO: reduce might need to return optional
         )
         var currResult = data["INTS"]!!
         ops.forEach { currResult = it.eval(currResult) }

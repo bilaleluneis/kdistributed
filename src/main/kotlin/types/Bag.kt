@@ -40,13 +40,13 @@ class BasicBag : Bag {
         return this
     }
 
-    override fun <T> reduce(grp: GrpID, r: (List<T>) -> T): T {
+    override fun <T, R> reduce(grp: GrpID, r: (List<T>) -> R): R {
         require(grp in ops)
         val result = ops[grp]?.run {
             this.add(Reduce(r))
             var currEval = data[grp]!!
             this.forEach { currEval = it.eval(currEval) }
-            currEval.toDataOnly<T>().first().data
+            currEval.toDataOnly<R>().first().data
         }
         return result!!
     }

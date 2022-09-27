@@ -27,7 +27,7 @@ class Map<T, R>(val m: (T) -> R) : FunctionalOps() {
     }
 }
 
-class Reduce<T>(val r: (List<T>) -> T) : FunctionalOps() {
+class Reduce<T, R>(val r: (List<T>) -> R) : FunctionalOps() {
     override fun eval(input: List<Data>): List<Data> {
         val rInput = input.toDataOnly<T>().map { it.data }
         val result = r(rInput)

@@ -14,11 +14,5 @@ enum class IDType(val length: Int) {
 // TODO: introduce const or enum to hold length for uuid , grpid,etc
 fun genId(type: IDType): String {
     val combChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
-    return (1..type.length)
-        .map { combChars.random() }
-        .joinToString("")
-}
-
-inline fun <reified T> convert(value: Any): T {
-    return value as T
+    return (1 until type.length).map { combChars.random() }.joinToString("")
 }
