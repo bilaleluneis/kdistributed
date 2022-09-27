@@ -4,7 +4,7 @@
  * bilaleluneis@gmail.com
  */
 
-import common.Distributed
+import types.Distributed
 import common.Host
 import common.InvalidOpProviderException
 import common.Port

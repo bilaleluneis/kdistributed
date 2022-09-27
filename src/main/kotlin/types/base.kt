@@ -6,8 +6,8 @@
 
 package types
 
-import common.Distributed
 import common.GrpID
+import java.rmi.Remote
 import java.rmi.RemoteException
 
 interface Functional : Distributed {
@@ -34,3 +34,6 @@ fun <T, R> Pair<Functional, GrpID>.map(m: (T) -> R) = let {
 fun <T> Pair<Functional, GrpID>.reduce(r: (List<T>) -> T) = let {
         (fType, grp) -> fType.reduce(grp, r)
 }
+
+// all distributed types interfaces will need to implement this
+interface Distributed : Remote

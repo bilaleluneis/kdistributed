@@ -7,7 +7,6 @@
 package common
 
 import java.io.Serializable
-import java.rmi.Remote
 
 @JvmInline
 value class Port(val value: Int = 8081)
@@ -29,14 +28,3 @@ fun <T> List<Data>.toDataOnly(): List<DataOnly<T>> = when (this[0]) {
     is DataOnly<*> -> this.filterIsInstance<DataOnly<T>>()
     is DataWithUuiD<*> -> this.filterIsInstance<DataWithUuiD<T>>().map { DataOnly(it.data) }
 }
-
-// all distributed types interfaces will need to implement this
-interface Distributed : Remote
-
-data class DistNode<T>(
-    val data:   T,
-    val grpId:  GrpID = GrpID(),
-    val uuid:   UuID =  UuID(),
-    val parent: UuID =  UuID(),
-    val child:  UuID =  UuID(),
-) : Serializable
