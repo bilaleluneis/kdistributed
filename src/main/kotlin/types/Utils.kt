@@ -3,8 +3,8 @@
  * @since Sep 2022
  * bilaleluneis@gmail.com
  */
+package types
 
-import types.Distributed
 import common.Host
 import common.InvalidOpProviderException
 import common.Port

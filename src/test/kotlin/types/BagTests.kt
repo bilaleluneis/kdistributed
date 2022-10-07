@@ -7,10 +7,8 @@ package types
  */
 
 import common.*
-import consume
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import publish
 import java.rmi.registry.LocateRegistry
 
 class BagTests {
