@@ -7,10 +7,10 @@ package types
  */
 
 import common.*
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.rmi.registry.LocateRegistry
+import org.junit.jupiter.api.extension.ExtendWith
 
+@ExtendWith(TestsTypePublisher::class)
 class BagTests {
 
     @Test
@@ -20,16 +20,6 @@ class BagTests {
                                                    .map<Int, Int>{ it + 0 }
                                                    .reduce<Int, Int>{it.first()}
         assert(result == 1)
-    }
-
-    companion object {
-        @JvmStatic
-        @BeforeAll
-        fun startWorker() {
-            LocateRegistry.createRegistry(8081)?.apply{
-                publish<Bag>(BasicBag())
-            }
-        }
     }
 
 }
