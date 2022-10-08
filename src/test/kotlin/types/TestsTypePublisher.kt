@@ -1,3 +1,9 @@
+/**
+ * @author Bilal El Uneis
+ * @since Oct 2022
+ * bilaleluneis@gmail.com
+ */
+
 package types
 
 import org.junit.jupiter.api.extension.BeforeAllCallback
@@ -9,7 +15,7 @@ object TestsTypePublisher : BeforeAllCallback, CloseableResource {
 
     init{
         println("Publishing Distributed Types")
-        LocateRegistry.createRegistry(8081)?.apply{publish<Bag>(BasicBag()) }
+        LocateRegistry.createRegistry(8081)?.apply{publish<Bag>(BasicBag())}
     }
 
     override fun beforeAll(context: ExtensionContext?) {}

@@ -1,10 +1,10 @@
-package types
-
 /**
  * @author Bilal El Uneis
  * @since Sep 2022
  * bilaleluneis@gmail.com
  */
+
+package types
 
 import common.*
 import org.junit.jupiter.api.Test
