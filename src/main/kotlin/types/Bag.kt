@@ -7,10 +7,8 @@
 package types
 
 import common.*
-import functional.Filter
-import functional.FunctionalOps
+import functional.*
 import functional.Map
-import functional.Reduce
 import java.rmi.RemoteException
 
 interface Bag : Functional {
@@ -30,14 +28,12 @@ class BasicBag : Bag {
         return Pair(this, grp)
     }
 
-    override fun <T> filter(grp: GrpID, f: (T) -> Boolean): BasicBag {
+    override fun <T> filter(grp: GrpID, f: (T) -> Boolean) {
         ops.getOrPut(grp) { mutableListOf() }.add(Filter(f))
-        return this
     }
 
-    override fun <T, R> map(grp: GrpID, m: (T) -> R): BasicBag {
+    override fun <T, R> map(grp: GrpID, m: (T) -> R) {
         ops.getOrPut(grp) { mutableListOf() }.add(Map(m))
-        return this
     }
 
     override fun <T, R> reduce(grp: GrpID, r: (List<T>) -> R): R {

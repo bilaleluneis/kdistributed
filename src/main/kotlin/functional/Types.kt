@@ -6,9 +6,8 @@
 
 package functional
 
-import common.Data
-import common.DataOnly
-import common.toDataOnly
+import common.*
+import java.rmi.RemoteException
 
 
 sealed class FunctionalOps {
@@ -33,4 +32,27 @@ class Reduce<T, R>(val r: (List<T>) -> R) : FunctionalOps() {
         val result = r(rInput)
         return listOf(DataOnly(result))
     }
+}
+
+interface Functional : Distributed {
+    @Throws(RemoteException::class)
+    fun <T> filter(grp: GrpID, f: (T) -> Boolean)
+
+    @Throws(RemoteException::class)
+    fun <T, R> map(grp: GrpID, m: (T) -> R)
+
+    @Throws(RemoteException::class)
+    fun <T, R> reduce(grp: GrpID, r: (List<T>) -> R): R
+}
+
+fun <T> Pair<Functional, GrpID>.filter(f: (T) -> Boolean) = let {
+        (fType, grp) -> fType.filter(grp, f)
+}
+
+fun <T, R> Pair<Functional, GrpID>.map(m: (T) -> R) = let {
+        (fType, grp) -> fType.map(grp, m)
+}
+
+fun <T, R> Pair<Functional, GrpID>.reduce(r: (List<T>) -> R) = let {
+        (fType, grp) -> fType.reduce(grp, r)
 }

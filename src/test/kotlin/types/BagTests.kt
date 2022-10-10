@@ -7,6 +7,9 @@
 package types
 
 import common.*
+import functional.filter
+import functional.map
+import functional.reduce
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -15,10 +18,11 @@ class BagTests {
 
     @Test
     fun basicBagTest() {
-        val bag = consume<Bag>(Host("localhost"), Port(8081))
-        val result = bag.create(1, 2, 3, 4, 5).filter<Int> {it < 3}
-                                                   .map<Int, Int>{ it + 0 }
-                                                   .reduce<Int, Int>{it.first()}
+        val bag = consume<Bag>(Host(), Port())
+        val result = bag.create(1, 2, 3, 4, 5).apply {
+            filter<Int> {it < 3}
+            map<Int, Int>{ it + 0 }
+        }.reduce<Int, Int> { it.first() }
         assert(result == 1)
     }
 

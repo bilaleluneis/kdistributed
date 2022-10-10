@@ -5,6 +5,7 @@
  */
 package types
 
+import common.Distributed
 import common.Host
 import common.InvalidOpProviderException
 import common.Port
