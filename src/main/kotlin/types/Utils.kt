@@ -15,8 +15,11 @@ import java.rmi.registry.Registry
 import java.rmi.server.UnicastRemoteObject
 
 @Throws(InvalidOpProviderException::class)
-inline fun <reified T : Distributed> consume(host: Host, port: Port): T {
-    return LocateRegistry.getRegistry(host.value, port.value).lookup(T::class.simpleName) as T
+inline fun <reified T : Distributed> consume(port: Port, hosts: List<Host>): List<T> {
+    return hosts.map{
+        LocateRegistry  .getRegistry(it.value, port.value)
+                        .lookup(T::class.simpleName) as T
+    }.toList()
 }
 
 @Throws(RemoteException::class)
