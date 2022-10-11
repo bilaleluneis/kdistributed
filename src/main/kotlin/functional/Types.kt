@@ -42,7 +42,7 @@ interface Functional : Distributed {
     fun <T, R> map(grp: GrpID, m: (T) -> R)
 
     @Throws(RemoteException::class)
-    fun <T, R> reduce(grp: GrpID, r: (List<T>) -> R): R
+    fun <T, R> reduce(grp: GrpID, r: (List<T>) -> R): R?
 }
 
 fun <T> Pair<Functional, GrpID>.filter(f: (T) -> Boolean) = let {

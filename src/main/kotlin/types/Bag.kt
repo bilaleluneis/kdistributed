@@ -8,7 +8,6 @@ package types
 
 import common.*
 import functional.*
-import functional.Map
 import java.rmi.RemoteException
 
 interface Bag : Functional {
@@ -19,32 +18,22 @@ interface Bag : Functional {
 
 class BasicBag : Bag {
 
-    private var data    = mutableMapOf<GrpID, List<Data>>()
-    private var ops     = mutableMapOf<GrpID, MutableList<FunctionalOps>>()
-
     override fun <T> create(vararg values: T): Pair<BasicBag, GrpID> {
         val grp = GrpID()
-        data[grp] = values.map { DataWithUuiD(it, UuID()) }
+        values.map { DataWithUuiD(it, UuID()) }.forEach { DataStore.insert(it, grp) }
         return Pair(this, grp)
     }
 
-    override fun <T> filter(grp: GrpID, f: (T) -> Boolean) {
-        ops.getOrPut(grp) { mutableListOf() }.add(Filter(f))
-    }
+    override fun <T> filter(grp: GrpID, f: (T) -> Boolean) = Operations.insert(Filter(f), grp)
 
-    override fun <T, R> map(grp: GrpID, m: (T) -> R) {
-        ops.getOrPut(grp) { mutableListOf() }.add(Map(m))
-    }
+    override fun <T, R> map(grp: GrpID, m: (T) -> R) = Operations.insert(Map(m), grp)
 
-    override fun <T, R> reduce(grp: GrpID, r: (List<T>) -> R): R {
-        require(grp in ops)
-        val result = ops[grp]?.run {
-            this.add(Reduce(r))
-            var currEval = data[grp]!!
-            this.forEach { currEval = it.eval(currEval) }
-            currEval.toDataOnly<R>().first().data
+    override fun <T, R> reduce(grp: GrpID, r: (List<T>) -> R): R? {
+        val ops = Operations.retrieve(grp)
+        var currEval = DataStore.retrieve(grp).orEmpty()
+        return ops?.forEach { op -> currEval = op.eval(currEval) }.run {
+            Reduce(r).eval(currEval).toDataOnly<R>().first().data
         }
-        return result!!
     }
 
 }
