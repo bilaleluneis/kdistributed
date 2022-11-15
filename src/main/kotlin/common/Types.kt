@@ -13,7 +13,7 @@ import java.rmi.Remote
 value class Port(val value: Int = 8081)
 
 @JvmInline
-value class Host(val value: String = "127.0.0.1")
+value class Host(val value: String = "0.0.0.0")
 
 @JvmInline
 value class GrpID(val value: String = genId(IDType.GRPID)) : Serializable
