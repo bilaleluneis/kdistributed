@@ -4,11 +4,11 @@
  * bilaleluneis@gmail.com
  */
 
-package types
+package org.distributed.types
 
-import common.Data
-import common.GrpID
-import functional.FunctionalOps
+import org.distributed.common.Data
+import org.distributed.common.GrpID
+import org.distributed.functional.FunctionalOps
 
 //TODO: change some of the methods to operators and infix
 

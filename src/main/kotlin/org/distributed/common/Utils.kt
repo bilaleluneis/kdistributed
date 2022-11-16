@@ -4,7 +4,7 @@
  * bilaleluneis@gmail.com
  */
 
-package common
+package org.distributed.common
 
 enum class IDType(val length: Int) {
     GRPID(12),

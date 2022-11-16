@@ -4,7 +4,7 @@
  * bilaleluneis@gmail.com
  */
 
-package types
+package org.distributed.types
 
 import org.junit.jupiter.api.extension.Extension
 import java.rmi.registry.LocateRegistry

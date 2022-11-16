@@ -4,10 +4,16 @@
  * bilaleluneis@gmail.com
  */
 
-package types
+package org.distributed.types
 
-import common.*
-import functional.*
+import org.distributed.common.DataWithUuiD
+import org.distributed.common.GrpID
+import org.distributed.common.UuID
+import org.distributed.common.toDataOnly
+import org.distributed.functional.Filter
+import org.distributed.functional.Functional
+import org.distributed.functional.Map
+import org.distributed.functional.Reduce
 import java.rmi.RemoteException
 
 interface Bag : Functional {

@@ -4,9 +4,9 @@
  * bilaleluneis@gmail.com
  */
 
-package functional
+package org.distributed.functional
 
-import common.*
+import org.distributed.common.*
 import org.junit.jupiter.api.Test
 
 class OperationTests {

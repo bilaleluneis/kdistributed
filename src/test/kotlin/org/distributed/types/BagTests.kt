@@ -4,12 +4,13 @@
  * bilaleluneis@gmail.com
  */
 
-package types
+package org.distributed.types
 
-import common.*
-import functional.filter
-import functional.map
-import functional.reduce
+import org.distributed.common.Host
+import org.distributed.common.Port
+import org.distributed.functional.filter
+import org.distributed.functional.map
+import org.distributed.functional.reduce
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 

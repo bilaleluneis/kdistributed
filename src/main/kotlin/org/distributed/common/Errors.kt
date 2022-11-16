@@ -4,7 +4,7 @@
  * bilaleluneis@gmail.com
  */
 
-package common
+package org.distributed.common
 
 import java.rmi.RemoteException
 

@@ -3,12 +3,12 @@
  * @since Sep 2022
  * bilaleluneis@gmail.com
  */
-package types
+package org.distributed.types
 
-import common.Distributed
-import common.Host
-import common.InvalidOpProviderException
-import common.Port
+import org.distributed.common.Distributed
+import org.distributed.common.Host
+import org.distributed.common.InvalidOpProviderException
+import org.distributed.common.Port
 import java.rmi.RemoteException
 import java.rmi.registry.LocateRegistry
 import java.rmi.registry.Registry
