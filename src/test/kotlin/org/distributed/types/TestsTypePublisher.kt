@@ -13,7 +13,8 @@ object TestsTypePublisher : Extension {
 
     init{
         println("Publishing Distributed Types")
-        RegisteredHost.init(8081, Host()).apply{
+        RegisteredHost.init(8081, Host())
+        RegisteredHost.registry?.apply {
             publish<Bag>(BasicBag())
         }
     }

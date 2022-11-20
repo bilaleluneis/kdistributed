@@ -10,13 +10,21 @@ import org.distributed.common.Host
 import org.distributed.common.InvalidOpProviderException
 import java.net.InetAddress
 import java.rmi.RemoteException
-import java.rmi.registry.LocateRegistry
+import java.rmi.registry.LocateRegistry.createRegistry
+import java.rmi.registry.LocateRegistry.getRegistry
 import java.rmi.registry.Registry
 import java.rmi.server.UnicastRemoteObject
 
 object RegisteredHost{
 
-    private var registry : Registry? = null
+    var registry : Registry? = null
+        private set
+        get(){
+            if(field == null && assignedPort != 0){
+                field =  createRegistry(assignedPort)
+            }
+            return field
+        }
 
     val currentHostName: String = InetAddress.getLocalHost().hostName
 
@@ -26,13 +34,11 @@ object RegisteredHost{
     var assignedPort : Int = 0
         private set
 
-    fun init(port: Int, vararg hosts : Host) : Registry {
+    fun init(port: Int, vararg hosts : Host) {
         if(hostList.isEmpty()){
-            hostList = arrayOf(*hosts) // TODO: check if hosts is empty?
+            hostList = arrayOf(*hosts)
             assignedPort = port
-            registry = LocateRegistry.createRegistry(port)
         }
-        return registry!!
     }
 
 }
@@ -40,8 +46,7 @@ object RegisteredHost{
 @Throws(InvalidOpProviderException::class)
 inline fun <reified T : Distributed> consume(): List<T> {
     return RegisteredHost.hostList.map{
-        LocateRegistry  .getRegistry(it.ip, RegisteredHost.assignedPort)
-                        .lookup(T::class.simpleName) as T
+        getRegistry(it.ip, RegisteredHost.assignedPort).lookup(T::class.simpleName) as T
     }.toList()
 }
 
