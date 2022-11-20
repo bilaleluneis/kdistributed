@@ -9,11 +9,7 @@ package org.distributed.common
 import java.io.Serializable
 import java.rmi.Remote
 
-@JvmInline
-value class Port(val value: Int = 8081)
-
-@JvmInline
-value class Host(val value: String = "0.0.0.0")
+data class Host(val name: String = "localhost", val ip: String = "127.0.0.1")
 
 @JvmInline
 value class GrpID(val value: String = genId(IDType.GRPID)) : Serializable

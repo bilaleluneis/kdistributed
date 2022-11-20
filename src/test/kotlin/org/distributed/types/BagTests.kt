@@ -6,8 +6,6 @@
 
 package org.distributed.types
 
-import org.distributed.common.Host
-import org.distributed.common.Port
 import org.distributed.functional.filter
 import org.distributed.functional.map
 import org.distributed.functional.reduce
@@ -19,7 +17,7 @@ class BagTests {
 
     @Test
     fun basicBagTest() {
-        val bags = consume<Bag>(Port(), listOf(Host()))
+        val bags = consume<Bag>()
         val result = bags.first().create(1, 2, 3, 4, 5).apply {
             filter<Int> {it < 3}
             map<Int, Int>{ it + 0 }

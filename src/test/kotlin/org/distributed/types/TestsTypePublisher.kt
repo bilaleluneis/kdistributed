@@ -6,14 +6,14 @@
 
 package org.distributed.types
 
+import org.distributed.common.Host
 import org.junit.jupiter.api.extension.Extension
-import java.rmi.registry.LocateRegistry
 
 object TestsTypePublisher : Extension {
 
     init{
         println("Publishing Distributed Types")
-        LocateRegistry.createRegistry(8081)?.apply{
+        RegisteredHost.init(8081, Host()).apply{
             publish<Bag>(BasicBag())
         }
     }
