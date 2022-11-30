@@ -6,23 +6,38 @@
 
 package org.distributed.types
 
-import org.distributed.functional.filter
-import org.distributed.functional.map
-import org.distributed.functional.reduce
+import org.distributed.common.GrpID
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import kotlin.test.Ignore
 
 @ExtendWith(TestsTypePublisher::class)
-class BagTests {
+internal class BagTests {
 
     @Test
     fun basicBagTest() {
-        val bags = consume<Bag>()
-        val result = bags.first().create(1, 2, 3, 4, 5).apply {
-            filter<Int> {it < 3}
-            map<Int, Int>{ it + 0 }
-        }.reduce<Int, Int> { it.first() }
-        assert(result == 1)
+
+        val bags = Hosts.consume<Bag>()
+        val grp = GrpID()
+        val result = bags.first().create(grp, 1, 2, 3).apply {
+            filter<Int>(grp){it < 2}
+            map<Int, Int>(grp) { it }
+        }.reduce<Int, String>(grp) {it.first().toString()}
+        assert(result!! == "1") { "failed" }
+        assert(Operations[grp].isEmpty()) { "ops were not removed after reduction" }
+
+    }
+
+    @Test
+    @Ignore
+    fun bagClientTest() {
+
+        BagClient(Hosts, 1, 2, 3).apply{
+            filter{ it < 2}
+            map<Int, Int>{it}
+        }.reduce{ it.first() as Int }
+
+        print("")
     }
 
 }

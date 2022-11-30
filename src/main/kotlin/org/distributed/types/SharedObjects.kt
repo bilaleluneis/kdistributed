@@ -10,8 +10,6 @@ import org.distributed.common.Data
 import org.distributed.common.GrpID
 import org.distributed.functional.FunctionalOps
 
-//TODO: change some of the methods to operators and infix
-
 /**
  * Singlton instance of Data Store made available to Distributed types
  * to reduce the need of creating Data Store for each type
@@ -20,14 +18,17 @@ object DataStore {
 
     private val data = mutableMapOf<GrpID, MutableList<Data>>()
 
-    fun insert(value : Data, forGrp: GrpID) {
+    operator fun set(key: GrpID, value: Data) = insert(value, key)
+
+    operator fun get(key: GrpID) : List<Data> = retrieve(key)
+
+    private fun insert(value: Data, forGrp: GrpID) {
         data.getOrPut(forGrp) { mutableListOf() }.add(value)
     }
 
-    fun retrieve(fromGrp: GrpID) = data[fromGrp]
+    private fun retrieve(fromGrp: GrpID) = data[fromGrp] ?: emptyList()
 
-
-    fun delete(grp: GrpID){ data.remove(grp) }
+    fun delete(grp: GrpID) = data.remove(grp)
 
 }
 
@@ -37,14 +38,18 @@ object DataStore {
  **/
 object Operations {
 
-    private val ops = mutableMapOf<GrpID, Array<FunctionalOps>>()
+    private val ops = mutableMapOf<GrpID, ArrayList<FunctionalOps>>()
 
-    fun insert(op: FunctionalOps, forGrp: GrpID) {
-        ops.getOrPut(forGrp) { arrayOf() } + op
+    operator fun set(key: GrpID, op: FunctionalOps) = insert(op, key)
+
+    operator fun get(key: GrpID) : ArrayList<FunctionalOps> = retrieve(key)
+
+    private fun insert(op: FunctionalOps, forGrp: GrpID) {
+        ops.getOrPut(forGrp) { arrayListOf() } += op
     }
 
-    fun retrieve(forGrp: GrpID) = ops[forGrp]
+    private fun retrieve(forGrp: GrpID) = ops[forGrp] ?: arrayListOf()
 
-    fun delete(grp: GrpID) { ops.remove(grp) }
+    fun delete(grp: GrpID) = ops.remove(grp)
 
 }

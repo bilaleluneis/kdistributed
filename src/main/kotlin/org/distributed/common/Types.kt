@@ -9,7 +9,9 @@ package org.distributed.common
 import java.io.Serializable
 import java.rmi.Remote
 
-data class Host(val name: String = "localhost", val ip: String = "127.0.0.1")
+data class Host(val name: String    = "localhost",
+                val ip: String      = "127.0.0.1",
+                val port: Int       = 8081)
 
 @JvmInline
 value class GrpID(val value: String = genId(IDType.GRPID)) : Serializable
@@ -25,6 +27,8 @@ fun <T> List<Data>.toDataOnly(): List<DataOnly<T>> = when (this[0]) {
     is DataOnly<*> -> this.filterIsInstance<DataOnly<T>>()
     is DataWithUuiD<*> -> this.filterIsInstance<DataWithUuiD<T>>().map { DataOnly(it.data) }
 }
+
+fun <T> List<T>.toData(): List<Data> = this.map { DataOnly(it) }
 
 // all distributed types interfaces will need to implement this
 interface Distributed : Remote

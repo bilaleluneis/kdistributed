@@ -7,6 +7,7 @@
 package org.distributed.functional
 
 import org.distributed.common.*
+import org.distributed.types.Operations
 import java.rmi.RemoteException
 
 
@@ -15,19 +16,15 @@ sealed class FunctionalOps {
 }
 
 class Filter<T>(val f: (T) -> Boolean) : FunctionalOps() {
-    override fun eval(input: List<Data>): List<Data> {
-        return input.toDataOnly<T>().filter { f(it.data) }
-    }
+    override fun eval(input: List<Data>) = input.toDataOnly<T>().filter { f(it.data) }
 }
 
 class Map<T, R>(val m: (T) -> R) : FunctionalOps() {
-    override fun eval(input: List<Data>): List<Data> {
-        return input.toDataOnly<T>().map { DataOnly(m(it.data)) }
-    }
+    override fun eval(input: List<Data>) = input.toDataOnly<T>().map { DataOnly(m(it.data)) }
 }
 
 class Reduce<T, R>(val r: (List<T>) -> R) : FunctionalOps() {
-    override fun eval(input: List<Data>): List<Data> {
+    override fun eval(input: List<Data>): List<DataOnly<R>> {
         val rInput = input.toDataOnly<T>().map { it.data }
         val result = r(rInput)
         return listOf(DataOnly(result))
