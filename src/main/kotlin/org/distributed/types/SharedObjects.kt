@@ -18,10 +18,12 @@ object DataStore {
 
     private val data = mutableMapOf<GrpID, MutableList<Data>>()
 
+    //TODO: overload to allow passing list
     operator fun set(key: GrpID, value: Data) = insert(value, key)
 
     operator fun get(key: GrpID) : List<Data> = retrieve(key)
 
+    //TODO: overload to allow passing list
     private fun insert(value: Data, forGrp: GrpID) {
         data.getOrPut(forGrp) { mutableListOf() }.add(value)
     }

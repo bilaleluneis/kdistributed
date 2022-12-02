@@ -9,7 +9,7 @@ package org.distributed.types
 import org.distributed.common.Host
 import org.junit.jupiter.api.extension.Extension
 
-val Hosts = listOf(
+internal val Hosts = listOf(
     Host(name = "Bilals-MacBook-Pro.local", port = 8081),
 )
 

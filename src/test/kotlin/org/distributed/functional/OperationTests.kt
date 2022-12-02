@@ -9,7 +9,7 @@ package org.distributed.functional
 import org.distributed.common.*
 import org.junit.jupiter.api.Test
 
-class OperationTests {
+internal class OperationTests {
 
     private val data = mapOf(
         // data containing ints

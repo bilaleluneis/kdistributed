@@ -14,8 +14,6 @@ import org.junit.jupiter.api.Test
 
 internal class OperationsTest{
 
-
-
     @Test
     fun operations() {
 
@@ -34,7 +32,6 @@ internal class OperationsTest{
         assert(Operations[grp].isEmpty()) { "operations for groupID: $grp were not removed" }
 
     }
-
 
 }
 

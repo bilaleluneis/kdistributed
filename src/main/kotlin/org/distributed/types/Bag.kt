@@ -16,15 +16,18 @@ import org.distributed.functional.Map
 import org.distributed.functional.Reduce
 import java.rmi.RemoteException
 
+//TODO: should I make bag impl internal and just expose client only?
+
 interface Bag : Functional {
     @Throws(RemoteException::class)
-    fun <T> create(group: GrpID, vararg values: T) : Bag
+    fun <T> create(group: GrpID, values: List<T>) : Bag
 }
 
 
 class BasicBag : Bag {
 
-    override fun <T> create(group: GrpID, vararg values: T) : BasicBag {
+    override fun <T> create(group: GrpID, values: List<T>) : BasicBag {
+        //TODO: change to map{}.tolist() or collect instead of looping as group is same
         values.map { DataWithUuiD(it, UuID()) }.forEach { DataStore[group] = it }
         return this
     }
@@ -45,11 +48,12 @@ class BasicBag : Bag {
 
 class BagClient<T>(hosts: List<Host>, vararg values: T) {
 
+    private val chunkSize: Int = 50
     private val availableBags = hosts.consume<Bag>()
     private val group = GrpID()
 
     init {
-        values.asList().chunked(values.size / availableBags.size).forEach {
+        values.toList().chunked(chunkSize / availableBags.size).forEach {
             availableBags.shuffled().first().create(group, it)
         }
     }
@@ -58,9 +62,6 @@ class BagClient<T>(hosts: List<Host>, vararg values: T) {
 
     fun <I, R> map(m: (I) -> R) { availableBags.forEach { it.map(group, m) } }
 
-    fun <R> reduce(r: (List<Any>) -> R) : R  {
-        val interm = availableBags.mapNotNull { it.reduce(group, r) }
-        return r(interm)
-    }
+    fun <I, R> reduce(r: (List<I>) -> R): List<R> = availableBags.mapNotNull { it.reduce(group, r) }
 
 }
