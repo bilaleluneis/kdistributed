@@ -17,7 +17,7 @@ internal object TestsTypePublisher : Extension {
 
     init{
         println("Publishing Distributed Types")
-        Hosts.publish<Bag>(BasicBag())
+        Hosts.publish<BagI>(BagImpl())
     }
 
 }

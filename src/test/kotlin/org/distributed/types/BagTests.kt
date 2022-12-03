@@ -15,9 +15,9 @@ import java.util.*
 internal class BagTests {
 
     @Test
-    fun basicBagTest() {
+    fun bagImplTest() {
 
-        val bags = Hosts.consume<Bag>()
+        val bags = Hosts.consume<BagI>()
         val grp = GrpID()
         val bag = bags.first().create(grp, listOf(1, 2, 3))
         bag.filter<Int>(grp) { it < 2 }
@@ -29,9 +29,9 @@ internal class BagTests {
     }
 
     @Test
-    fun bagClientTest() {
+    fun bagTest() {
         val values = (1..100).toList().toTypedArray()
-        val bag = BagClient(Hosts, *values)
+        val bag = Bag(hosts = Hosts, values = values)
         bag.filter { it < 25 }
         bag.map<Int, Int> { it }
         assert(bag.reduce<Int, Int>{ it.size }.first() == 24) { "bagClient Test Failed" }
