@@ -16,15 +16,17 @@ import org.distributed.functional.Map
 import org.distributed.functional.Reduce
 import java.rmi.RemoteException
 
-interface BagI : Functional {
+interface Bag : Functional {
     @Throws(RemoteException::class)
-    fun <T> create(group: GrpID, values: List<T>) : BagI
+    fun <T> create(group: GrpID, values: List<T>) : Bag
 }
 
-internal class BagImpl : BagI {
+/**
+ * Server (Node) side implementation of the Bag Remote Interface
+ */
+class BagService : Bag {
 
-    override fun <T> create(group: GrpID, values: List<T>) : BagImpl {
-        //TODO: change to map{}.tolist() or collect instead of looping as group is same
+    override fun <T> create(group: GrpID, values: List<T>) : BagService {
         values.map { DataWithUuiD(it, UuID()) }.forEach { DataStore[group] = it }
         return this
     }
@@ -43,9 +45,14 @@ internal class BagImpl : BagI {
 
 }
 
-class Bag<T>(hosts: List<Host>, chunkSize: Int = 100, vararg values: T) {
+/**
+ * This class is to be used for convenience on client side.
+ * it will take care of aquiring all available Bags on registered Nodes
+ * and run operations on the cluster.
+ */
+class BagClient<T>(hosts: List<Host>, chunkSize: Int = 100, vararg values: T) {
 
-    private val availableBags = hosts.consume<BagI>()
+    private val availableBags = hosts.consume<Bag>()
     private val group = GrpID()
 
     init {
