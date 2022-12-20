@@ -9,6 +9,7 @@ package org.distributed.common
 enum class IDType(val length: Int) {
     GRPID(12),
     UUID(6),
+    TYPEID(18),
 }
 
 fun genId(type: IDType): String {
