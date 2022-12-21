@@ -11,6 +11,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.*
 
+//TODO:
+// - write Test to simulate a node down [create your own hosts containing Hosts and a node that doesnt exist].
+
 @ExtendWith(TestsTypePublisher::class)
 internal class BagTests {
 
@@ -24,17 +27,28 @@ internal class BagTests {
         bag.map<Int, Int>(grp) { it }
         val result = bag.reduce<Int, Int>(grp) { it.size } ?: 0
         assert(result == 1) { "failed" }
-        assert(Operations[grp].isEmpty()) { "ops were not removed after reduction" }
+        //TODO: how to confirm operations were cleared
+        //assert(Operations[grp].isEmpty()) { "ops were not removed after reduction" }
 
     }
 
     @Test
     fun bagTest() {
         val values = (1..100).toList().toTypedArray()
-        val bag = BagClient(hosts = Hosts, values = values)
+        val bag = BagClient(hosts = Hosts, values = values, chunkSize = 10)
         bag.filter { it < 25 }
         bag.map<Int, Int> { it }
-        assert(bag.reduce<Int, Int>{ it.size }.first() == 24) { "bagClient Test Failed" }
+
+        // initial reduction happens on each bag and comes back as list
+        // containing the reduction result from each bag
+        val bagsReduce = bag.reduce<Int, Int>{ it.size }
+
+        // final reduction always happens on client, and takes
+        // the reduction result from each bag and applies a client
+        // side reduction.
+        val finalReduction = bagsReduce.sum()
+
+        assert(finalReduction == 24) { "bagClient Test Failed" }
     }
 
     /**
@@ -48,10 +62,6 @@ internal class BagTests {
         val result =  (1..10).toList().chunked(chunkSize / numOfBags)
         assert(result.size == 1)
     }
-
-    //TODO: test when calling create on a bag multiple times with chunks of values
-    // that values are appended into the list associated with grp id and not
-    // ends up creating new list under that group
 
 }
 

@@ -18,18 +18,19 @@ internal class OperationsTest{
     fun operations() {
 
         val grp = GrpID()
+        val operations = OperationStore()
         val ops = arrayOf(
             Filter<Int>{ it < 10 },
             Map<Int, Int>{ it * it },
             Reduce<Int, Int> {it.size}
         )
 
-        assert(Operations[grp].isEmpty()) { "GrpID already exist" }
-        ops.forEach { Operations[grp] = it }
-        assert(Operations[grp].isNotEmpty()) { "Ops count should not be zero" }
-        assert(Operations[grp].size == ops.size) { "ops stores != ops inserted" }
-        Operations.delete(grp)
-        assert(Operations[grp].isEmpty()) { "operations for groupID: $grp were not removed" }
+        assert(operations[grp].isEmpty()) { "GrpID already exist" }
+        ops.forEach { operations[grp] = it }
+        assert(operations[grp].isNotEmpty()) { "Ops count should not be zero" }
+        assert(operations[grp].size == ops.size) { "ops stores != ops inserted" }
+        operations.delete(grp)
+        assert(operations[grp].isEmpty()) { "operations for groupID: $grp were not removed" }
 
     }
 

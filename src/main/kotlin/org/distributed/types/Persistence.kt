@@ -11,10 +11,9 @@ import org.distributed.common.GrpID
 import org.distributed.functional.FunctionalOps
 
 /**
- * Singlton instance of Data Store made available to Distributed types
- * to reduce the need of creating Data Store for each type
+ * provides Data Storage and Retrieval capabilities
  **/
-object DataStore {
+class DataStore {
 
     private val data = mutableMapOf<GrpID, MutableList<Data>>()
 
@@ -35,10 +34,9 @@ object DataStore {
 }
 
 /**
- * Singleton instance that holds Functional Operations
- * to be performed on a Group
+ * provieds Operations Storage and Retrieval capabilities
  **/
-object Operations {
+class OperationStore {
 
     private val ops = mutableMapOf<GrpID, ArrayList<FunctionalOps>>()
 

@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject.exportObject
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 
+// TODO: rewrite this , looks way too complicated!!
 @Throws(RemoteException::class)
 inline fun <reified T : Distributed> List<Host>.consume(): List<T> {
     val type = T::class.simpleName

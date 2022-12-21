@@ -26,20 +26,23 @@ interface Bag : Functional {
  */
 class BagService : Bag {
 
+    private val dataStore = DataStore()
+    private val ops = OperationStore()
+
     override fun <T> create(group: GrpID, values: List<T>) : BagService {
-        values.map { DataWithUuiD(it, UuID()) }.forEach { DataStore[group] = it }
+        values.map { DataWithUuiD(it, UuID()) }.forEach { dataStore[group] = it }
         return this
     }
 
-    override fun <T> filter(grp: GrpID, f: (T) -> Boolean) { Operations[grp] = Filter(f) }
+    override fun <T> filter(grp: GrpID, f: (T) -> Boolean) { ops[grp] = Filter(f) }
 
-    override fun <T, R> map(grp: GrpID, m: (T) -> R) { Operations[grp] = Map(m) }
+    override fun <T, R> map(grp: GrpID, m: (T) -> R) { ops[grp] = Map(m) }
 
     override fun <T, R> reduce(grp: GrpID, r: (List<T>) -> R): R? {
-       val resultList =  Operations[grp].fold(DataStore[grp]){
+       val resultList =  ops[grp].fold(dataStore[grp]){
             currResult, op ->  op.eval(currResult)
         }
-        Operations.delete(grp)
+        ops.delete(grp)
         return Reduce(r).eval(resultList).first().data
     }
 
